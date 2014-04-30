@@ -198,13 +198,24 @@
                           echo '<div class="logline clearfix level-'.$cssClass.'">';
                           echo '<div class="level level-'.$cssClass.'"><i class="fa fa-'.$levelIcon.'"></i>&nbsp;</div>';
                           echo '<div class="message">'.$message.'</div>';
-                          echo '<div class="date">'.$line['date']->format("d.m.Y, H:i:s").'</div>';
+                          echo '<div class="date">'.$line['date']->format("Y-m-d H:i:s").'</div>';
                           echo '<div class="more" id="more-'.($id+1).'" onclick="toggleMore('.($id+1).');"><i class="fa fa-search-plus"></i> more...</div>';
                           echo '<div class="context" id="context-'.($id+1).'"><table>';
 
+                          if ( !empty($line['context']) ){
+                              echo '<tr><td class="context-extra-more" colspan="2">Context</td></tr>';
                             foreach($line['context'] as $title => $content) {
                               echo '<tr><td><strong>' . $title . '</strong></td>';
-                              echo '<td>' . nl2br($content) . '</td></tr>';
+                              echo '<td><pre>' . print_r(json_decode($content, true),true) . '</pre></td></tr>';
+                            }
+                          }
+
+                          if ( !empty($line['extra']) ){
+                            echo '<tr><td class="context-extra-more" colspan="2">Extra</td></tr>';
+                            foreach($line['extra'] as $title => $content) {
+                              echo '<tr><td><strong>' . $title . '</strong></td>';
+                              echo '<td><pre>' . htmlspecialchars(print_r($content,true)) . '</pre></td></tr>';
+                            }
                           }
                           echo '</table></div>';
                           echo '</div>';
