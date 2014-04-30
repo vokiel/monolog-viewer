@@ -22,16 +22,18 @@ To set up log files, make sure to fill in the config file following this structu
 {
     "clients": [
         {
-            "name": "Your first client",
+            "name": "demo-local-dir",
+            "type" : "directory",
+            "extension" : "log",
+            "logs": [
+                "/var/www/monlog-test.dev/logs"
+            ]
+        },
+        {
+            "name": "Demo-Client",
             "logs": {
                 "Error-Log":"http://acme.com/logs/error.log",
                 "Info-Log":"http://acme.com/logs/info.log"
-            }
-        },
-        {
-            "name": "Your second client",
-            "logs": {
-                "Sent Mails":"http://acme-forum.com/logs/mail.log"
             }
         }
     ]
@@ -39,8 +41,10 @@ To set up log files, make sure to fill in the config file following this structu
 ```
 **Note:** If your `config.json` is invalid or none of your log files are readable, Monolog Viewer will display an error message. Also, if a client contains only logs that are not readable, the client will not be listed in the navigation.
 
+**Note 2:** From 298cf8d1a38bc30fb24fd29808d54763feb1caad `config.json` can contain paths for logs directories. If you pass such path you do not need to list all log files individually as they will be automatically scanned.
+
 # Password management
-My goal was to keep this tool so simple, that it can be installed on any shared hosting. Therefore I decicded not to use a database to store the password. 
+My goal was to keep this tool so simple, that it can be installed on any shared hosting. Therefore I decided not to use a database to store the password.
 
 To keep things secure, Monolog Viewer creates a randomly named file inside the folder `/secure/pwd`. This ensures that your password hash is safe, even if someone knows how this process works. 
 
