@@ -6,22 +6,26 @@ use Dubture\Monolog\Parser\LineLogParser;
 class LogFile {
     protected $name;
     protected $slug;
-    protected $path;
     protected $lines;
 
-    public function __construct($name, $path) {
+    public function __construct($file) {
         setlocale(LC_ALL, 'en_US.UTF8');
         
-        $this->name = $name;
-        $this->slug = $this->toAscii($name);
-        $this->path = $path;
-        
-        $ch = curl_init();
-        curl_setopt ($ch, CURLOPT_URL, $this->path);
-        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-        $file = curl_exec($ch);
-        curl_close($ch);
-        
+        $this->name = $file['name'];
+        $this->slug = $this->toAscii($file['name']);
+
+        if ( $file['type'] == 'directory'){
+          if ( file_exists($file['file']) && is_readable($file['file']) ) {
+            $file = file_get_contents($file['file']);
+          }
+        }
+        else {
+          $ch = curl_init();
+          curl_setopt($ch, CURLOPT_URL, $file['file']);
+          curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+          $file = curl_exec($ch);
+          curl_close($ch);
+        }
         $lines = explode("\n", $file);
 
         foreach($lines as $line) {

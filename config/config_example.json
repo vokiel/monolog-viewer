@@ -1,16 +1,18 @@
 {
     "clients": [
         {
+            "name": "demo-local-dir",
+            "type" : "directory",
+            "extension" : "log",
+            "logs": [
+                "/var/www/monlog-test.dev/logs"
+            ]
+        },
+        {
             "name": "Demo-Client",
             "logs": {
                 "Error-Log":"http://acme.com/logs/error.log",
                 "Info-Log":"http://acme.com/logs/info.log"
-            }
-        },
-        {
-            "name": "Acme Company",
-            "logs": {
-                "Sent Mails":"http://acme.com/logs/mail.log"
             }
         }
     ]

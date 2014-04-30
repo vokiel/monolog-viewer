@@ -8,7 +8,6 @@ class LogViewer {
     public function __construct($configPath) {
         setlocale(LC_ALL, 'en_US.UTF8');
 
-        $logs = array();
         $this->logs = array();
         $this->clients = array();
 
@@ -17,17 +16,34 @@ class LogViewer {
         
         foreach ($logs as $log) {
             $logfiles = array();
-            foreach($log['logs'] as $name => $file) {
+            if ( $log['type'] == 'directory'){
+              $ext = !empty($log['extension']) ? $log['extension'] : 'log';
+              foreach ($log['logs'] as $dir ) {
+                $DirectoryIterator = new \RecursiveDirectoryIterator($dir);
+                $IteratorIterator = new \RecursiveIteratorIterator($DirectoryIterator);
+                $Regex = new \RegexIterator($IteratorIterator, '/^.+\.'.$ext.'$/i', \RecursiveRegexIterator::GET_MATCH);
+
+                foreach ( $Regex as $fullPath ) {
+                  $name = basename($fullPath[0],'.'.$ext);
+                  $logfiles[$this->toAscii($name)] = array('name' => $name, 'file' => $fullPath[0], 'type' => 'directory');
+                }
+              }
+            }
+            else {
+              foreach ($log['logs'] as $name => $file) {
                 $ch = curl_init($file);
-                curl_setopt($ch, CURLOPT_NOBODY, true);
+                curl_setopt($ch, CURLOPT_NOBODY, TRUE);
                 curl_exec($ch);
                 $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 curl_close($ch);
-                if($retcode == 200) { 
-                    $logfiles[$this->toAscii($name)] = array('name' => $name, 'file' => $file);
+                if ($retcode == 200) {
+                  $logfiles[$this->toAscii($name)] = array('name' => $name, 'file' => $file, 'type' => 'url');
                 }
+              }
             }
-            
+
+            asort($logfiles);
+
             // Only add client if at least one log file is readable.
             if(count($logfiles) > 0) {
                 $this->logs[$this->toAscii($log['name'])] = array(
@@ -65,7 +81,7 @@ class LogViewer {
         if(isset($this->logs[$client]['logs'][$slug]))
         {
             $file = $this->logs[$client]['logs'][$slug];
-            return new LogFile($file['name'], $file['file']);
+            return new LogFile($file);
         }
     }
     
