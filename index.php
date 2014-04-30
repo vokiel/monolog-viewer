@@ -10,13 +10,13 @@
     $app = new \SyonixLogViewer\LogViewer('./config/config.json');
     
     session_start();
-    
+
     /* Logout */
     if(isset($_GET['a']) && $_GET['a'] == 'logout') {
         $_SESSION['authenticated'] = false;
-		session_destroy();
-		header("Location: http://" . $_SERVER['SERVER_NAME']);
-	}
+        session_destroy();
+        header("Location: http://" . $_SERVER['SERVER_NAME']);
+    }
     
     /* Setup login */
     if(isset($_POST['setup'])) {
@@ -70,7 +70,7 @@
             $redirect = true;
         }
         if($redirect === true) {
-            header("Location: /".$_SESSION['client'] . "/" . $_SESSION['log']);
+            header("Location: http://" . $_SERVER['SERVER_NAME']."/".$_SESSION['client'] . "/" . $_SESSION['log']);
         }
     }
 ?>
@@ -201,8 +201,8 @@
                           echo '<div class="date">'.$line['date']->format("d.m.Y, H:i:s").'</div>';
                           echo '<div class="more" id="more-'.($id+1).'" onclick="toggleMore('.($id+1).');"><i class="fa fa-search-plus"></i> more...</div>';
                           echo '<div class="context" id="context-'.($id+1).'"><table>';
-                          
-                          foreach($line['context'] as $title => $content) {
+
+                            foreach($line['context'] as $title => $content) {
                               echo '<tr><td><strong>' . $title . '</strong></td>';
                               echo '<td>' . nl2br($content) . '</td></tr>';
                           }

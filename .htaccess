@@ -1,20 +1,25 @@
-<IfModule mod_rewrite.c>  
+<IfModule mod_rewrite.c>
     RewriteEngine on
+    RewriteBase /
+
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^([a-zA-Z0-9_-]+)$ index.php?c=$1
-    
-    
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/$ index.php?c=$1&l=$2 [L]
+
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^([a-zA-Z0-9_-]+)/$ index.php?c=$1
-    
-    
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)$ index.php?c=$1&l=$2 [L]
+
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)$ index.php?c=$1&l=$2
-    
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^([a-zA-Z0-9_-]+)/$ index.php?c=$1 [L]
+
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/$ index.php?c=$1&l=$2
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^([a-zA-Z0-9_-]+)$ index.php?c=$1 [L]
+    
 </IfModule>
