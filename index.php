@@ -109,6 +109,11 @@
             $(document).ready(function(){
                 $("div.context").hide();
                 $.stayInWebApp();
+
+                $('#jump-to-newest').click(function(e){
+                    e.preventDefault();
+                    $('#content').animate({ scrollTop: 0 }, 500);
+                });
             });
             
             function toggleMore(id) {
@@ -144,6 +149,7 @@
         </nav>
         <header id="logs">
           <ul>
+              <li><a href="#" id="jump-to-newest"><i class="fa fa-arrow-circle-down"></i> Jump to newest entry</a></li>
               <?php 
                   foreach($app->getLogs($_SESSION['client']) as $slug => $log) {
                       echo '<li';
@@ -151,7 +157,6 @@
                       echo '><a href="/' . $_SESSION['client'] . '/' . $slug . '">' . $log['name'] . '</a></li>';
                   }
               ?>
-              <li class="pull-right"><a href="#" onclick="$('#content').animate({ scrollTop: $('#content').prop('scrollHeight') - $('#content').height() }, 500); return false;"><i class="fa fa-arrow-circle-down"></i> Jump to newest entry</a></li>
           </ul>
         </header>
         <div id="content">
